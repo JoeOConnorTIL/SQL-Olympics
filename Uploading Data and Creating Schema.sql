@@ -187,7 +187,6 @@ SELECT
   city 
 FROM 
   games_s1;
--- and for events
 -- and for events:
 CREATE TABLE events (
   event_id INT,
@@ -202,9 +201,6 @@ SELECT DISTINCT
 	FROM staging
     )
 SELECT 
-  * 
-FROM 
-  staging;
 ROW_NUMBER() OVER(ORDER BY event, sport) as event_id,
 event,
 sport
