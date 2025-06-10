@@ -188,10 +188,28 @@ SELECT
 FROM 
   games_s1;
 -- and for events
+-- and for events:
+CREATE TABLE events (
+  event_id INT,
+  event VARCHAR(100),
+  sport VARCHAR(25)
+);
+INSERT INTO events
+WITH events_s1 AS(
+SELECT DISTINCT 
+	event,
+	sport
+	FROM staging
+    )
 SELECT 
   * 
 FROM 
   staging;
+ROW_NUMBER() OVER(ORDER BY event, sport) as event_id,
+event,
+sport
+FROM events_s1;
+
 
 
 -- TBC
