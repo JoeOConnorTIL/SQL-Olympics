@@ -206,9 +206,48 @@ event,
 sport
 FROM events_s1;
 
+-- Now to create the results fact table:
 
+CREATE TABLE results (
+athlete_id INT,
+athlete_age INT,
+team_id INT,
+games_id INT,
+event_id INT,
+medal VARCHAR(6)
+);
 
--- TBC
+-- Populating this table: 
+INSERT INTO results
+SELECT DISTINCT
+id AS athlete_id,
+NULLIF(age,'') as athlete_age,
+team_id,
+games_id,
+event_id,
+medal
+FROM staging as S
+INNER JOIN teams as T on T.team = S.team
+INNER JOIN games as G on G.games = S.games AND G.year = S.year AND G.Season = S.season
+INNER JOIN events as E on E.event = S.event and E.sport = S.sport
+;
+
+-- Setting Primary and foreign keys to link the dimension tables to this new fact table (Note that athlete_id was already done earlier in the script):
+ALTER TABLE teams
+ADD PRIMARY KEY(team_id);
+ALTER TABLE games
+ADD PRIMARY KEY(games_id);
+ALTER TABLE events
+ADD PRIMARY KEY(event_id);
+-- making these relate to foreign keys in the results table:
+ALTER TABLE results
+ADD FOREIGN KEY(athlete_id) REFERENCES athletes(athlete_id);
+ALTER TABLE results
+ADD FOREIGN KEY(team_id) REFERENCES teams(team_id);
+ALTER TABLE results
+ADD FOREIGN KEY(games_id) REFERENCES games(games_id);
+ALTER TABLE results
+ADD FOREIGN KEY(event_id) REFERENCES events(event_id);
 
 
 
