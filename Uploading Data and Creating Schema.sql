@@ -248,11 +248,3 @@ ALTER TABLE results
 ADD FOREIGN KEY(games_id) REFERENCES games(games_id);
 ALTER TABLE results
 ADD FOREIGN KEY(event_id) REFERENCES events(event_id);
-
-
-
-
-
-
-
-
